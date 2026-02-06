@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Personas</title>
+</head>
+<body>
+
+<h1>Lista de Personas</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+    </tr>
+
+    <tr th:each="p : ${personas}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.nombre}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

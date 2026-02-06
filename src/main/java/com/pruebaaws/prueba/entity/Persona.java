@@ -11,15 +11,17 @@ public class Persona {
     private Long id;
 
     private String nombre;
+    private String apellido;
     private int edad;
 
     // Constructor vacío (OBLIGATORIO)
     public Persona() {}
 
     // Constructor
-    public Persona(String nombre, int edad) {
+    public Persona(String nombre,String apellido, int edad) {
         this.nombre = nombre;
         this.edad = edad;
+        this.apellido = apellido;
     }
 
     // Getters y setters
@@ -39,6 +41,10 @@ public class Persona {
         this.nombre = nombre;
     }
 
+    public String getApellido() { return apellido; }
+
+    public void setApellido(String apellido) { this.apellido = apellido; }
+
     public int getEdad() {
         return edad;
     }
@@ -46,4 +52,5 @@ public class Persona {
     public void setEdad(int edad) {
         this.edad = edad;
     }
+
 }

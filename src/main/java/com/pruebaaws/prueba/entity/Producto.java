@@ -13,6 +13,7 @@ public class Producto {
     private String nombre;
     private Double precio;
     private String descripcion;
+    private String stock;
 
     // getters y setters
 }
