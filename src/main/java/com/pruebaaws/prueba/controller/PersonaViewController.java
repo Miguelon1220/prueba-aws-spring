@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/personas")
+@RequestMapping("/view-personas")
 public class PersonaViewController {
 
     private final PersonaService personaService;

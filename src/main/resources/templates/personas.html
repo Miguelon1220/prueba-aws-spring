@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <title>Personas</title>
+    <meta charset="UTF-8">
+    <title>Lista de Personas</title>
 </head>
 <body>
 
@@ -11,13 +12,30 @@
     <tr>
         <th>ID</th>
         <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Edad</th>
     </tr>
-
-    <tr th:each="p : ${personas}">
-        <td th:text="${p.id}"></td>
-        <td th:text="${p.nombre}"></td>
-    </tr>
+    <tbody id="tabla-personas"></tbody>
 </table>
+
+<script>
+    fetch('/api/personas')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('tabla-personas');
+            data.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${p.id}</td>
+                    <td>${p.nombre}</td>
+                    <td>${p.apellido}</td>
+                    <td>${p.edad}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+</script>
 
 </body>
 </html>
