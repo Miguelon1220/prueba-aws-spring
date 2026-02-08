@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacto | TechStore</title>
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" th:href="@{/css/contacto.css}">
+</head>
+
+<body>
+
+<header>
+  <h1>TechStore</h1>
+  <nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/productos}">Productos</a>
+    <a th:href="@{/contactos}">Contacto</a>
+    <a th:href="@{/register}">Login / Register</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Contáctanos</h2>
+  <p>Estamos disponibles para ayudarte por nuestros canales oficiales</p>
+
+  <div class="contactos">
+
+    <div class="contacto">
+      <img src="https://img.icons8.com/color/96/gmail-new.png">
+      <h3>Gmail</h3>
+      <a href="mailto:techstore.oficial@gmail.com">
+        techstore.oficial@gmail.com
+      </a>
+    </div>
+
+    <div class="contacto">
+      <img src="https://img.icons8.com/color/96/ms-outlook.png">
+      <h3>Hotmail</h3>
+      <a href="mailto:techstore_soporte@hotmail.com">
+        techstore_soporte@hotmail.com
+      </a>
+    </div>
+
+    <div class="contacto">
+      <img src="https://img.icons8.com/color/96/facebook-new.png">
+      <h3>Facebook</h3>
+      <a href="https://www.facebook.com/TechStore.Oficial" target="_blank">
+        facebook.com/TechStore.Oficial
+      </a>
+    </div>
+
+    <div class="contacto">
+      <img src="https://img.icons8.com/color/96/instagram-new.png">
+      <h3>Instagram</h3>
+      <a href="https://www.instagram.com/techstore.oficial" target="_blank">
+        @techstore.oficial
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 TechStore</p>
+</footer>
+
+</body>
+</html>

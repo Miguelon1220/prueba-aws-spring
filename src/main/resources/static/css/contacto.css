@@ -10,6 +10,7 @@ body {
     color: #1e293b;
 }
 
+/* HEADER */
 header {
     background: #1e293b;
     color: white;
@@ -23,61 +24,64 @@ nav a {
     color: white;
     margin-left: 20px;
     text-decoration: none;
-    font-weight: 500;
+    font-size: 15px;
 }
 
 nav a:hover {
     text-decoration: underline;
 }
 
+/* MAIN */
 main {
-    padding: 60px 10%;
+    padding: 70px 10%;
 }
 
-.empresa {
-    margin-bottom: 60px;
-}
-
-.empresa h2 {
+main h2 {
     font-size: 36px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-.empresa p {
+main p {
+    text-align: center;
     font-size: 18px;
-    line-height: 1.6;
     color: #475569;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
 }
 
-.equipo h2 {
-    font-size: 32px;
-    margin-bottom: 30px;
-}
-
-.miembros {
+/* CONTACTOS */
+.contactos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
 }
 
-.miembro {
+.contacto {
     background: white;
-    padding: 25px;
-    border-radius: 14px;
+    padding: 30px;
+    border-radius: 16px;
     text-align: center;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-.miembro img {
-    width: 80px;
+.contacto img {
+    width: 70px;
     margin-bottom: 15px;
 }
 
-.miembro h3 {
-    font-size: 18px;
+.contacto h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
+.contacto a {
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 16px;
+    word-break: break-all;
+}
+
+/* FOOTER */
 footer {
     background: #0f172a;
     color: white;

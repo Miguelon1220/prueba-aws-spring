@@ -6,8 +6,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    @GetMapping("/home")
-    public String inicio() {
-        return "home"; // index.html en /resources/templates
+    // HOME
+    @GetMapping("/")
+    public String home() {
+        return "home"; // home.html
+    }
+
+    // CONTACTO
+    @GetMapping("/contacto")
+    public String contacto() {
+        return "contacto"; // contacto.html
+    }
+
+    // PRODUCTOS (vista)
+    @GetMapping("/productos")
+    public String productos() {
+        return "productos"; // productos.html
     }
 }

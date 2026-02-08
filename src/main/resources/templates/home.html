@@ -1,32 +1,84 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mi E-commerce</title>
-    <link rel="stylesheet" href="/css/homeStyle.css">
+    <title>Inicio | TechStore</title>
+    <link rel="stylesheet" th:href="@{/css/homeStyle.css}">
 </head>
+
 <body>
+
 <header>
-    <h1>Bienvenido a Mi E-commerce</h1>
+    <h1>TechStore</h1>
     <nav>
-        <a th:href="@{/view-productos}">Ver Productos</a>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/view-productos}">Productos</a>
+        <a th:href="@{/contacto}">Contacto</a>
+        <a th:href="@{/register}">Login / Register</a>
+
     </nav>
 </header>
 
 <main>
-    <section>
-        <h2>Ofertas del día</h2>
-        <p>Aquí puedes mostrar productos destacados o banners</p>
+
+    <section class="empresa">
+        <h2>¿Quiénes somos?</h2>
+        <p>
+            TechStore es una empresa dedicada a la venta de productos tecnológicos,
+            comprometida con la innovación, la calidad y la satisfacción de nuestros clientes.
+            Nuestro objetivo es ofrecer soluciones tecnológicas accesibles y confiables.
+        </p>
+        <p>
+            Contamos con un equipo de <strong>22 integrantes</strong> que trabajan en conjunto
+            para brindar el mejor servicio y experiencia de compra.
+        </p>
     </section>
 
-    <section>
-        <h2>Productos Nuevos</h2>
-        <p>¡Explora nuestro catálogo completo en la sección de productos!</p>
+    <section class="equipo">
+        <h2>Nuestro Equipo</h2>
+
+        <div class="miembros">
+
+            <div class="miembro">
+                <img src="https://img.icons8.com/fluency/96/user-male-circle.png">
+                <h3>Integrante 1</h3>
+            </div>
+
+            <div class="miembro">
+                <img src="https://img.icons8.com/fluency/96/user-female-circle.png">
+                <h3>Integrante 2</h3>
+            </div>
+
+            <!-- Resto de integrantes -->
+            <div class="miembro"><h3>Integrante 3</h3></div>
+            <div class="miembro"><h3>Integrante 4</h3></div>
+            <div class="miembro"><h3>Integrante 5</h3></div>
+            <div class="miembro"><h3>Integrante 6</h3></div>
+            <div class="miembro"><h3>Integrante 7</h3></div>
+            <div class="miembro"><h3>Integrante 8</h3></div>
+            <div class="miembro"><h3>Integrante 9</h3></div>
+            <div class="miembro"><h3>Integrante 10</h3></div>
+            <div class="miembro"><h3>Integrante 11</h3></div>
+            <div class="miembro"><h3>Integrante 12</h3></div>
+            <div class="miembro"><h3>Integrante 13</h3></div>
+            <div class="miembro"><h3>Integrante 14</h3></div>
+            <div class="miembro"><h3>Integrante 15</h3></div>
+            <div class="miembro"><h3>Integrante 16</h3></div>
+            <div class="miembro"><h3>Integrante 17</h3></div>
+            <div class="miembro"><h3>Integrante 18</h3></div>
+            <div class="miembro"><h3>Integrante 19</h3></div>
+            <div class="miembro"><h3>Integrante 20</h3></div>
+            <div class="miembro"><h3>Integrante 21</h3></div>
+            <div class="miembro"><h3>Integrante 22</h3></div>
+
+        </div>
     </section>
+
 </main>
 
 <footer>
-    <p>&copy; 2026 Mi E-commerce</p>
+    <p>&copy; 2026 TechStore</p>
 </footer>
+
 </body>
 </html>
