@@ -1,0 +1,120 @@
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* BODY */
+body {
+    background: #f4f6f8;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+header {
+    background: #0f172a;
+    color: white;
+    padding: 15px 40px;
+}
+
+header h1 {
+    margin-bottom: 8px;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: #38bdf8;
+}
+
+/* MAIN */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* PERFIL CARD */
+.perfil-card {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* TITULO */
+.perfil-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0f172a;
+}
+
+/* INFO */
+.perfil-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.perfil-info div {
+    background: #f1f5f9;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.perfil-info span {
+    font-weight: bold;
+    color: #0f172a;
+}
+
+/* ROL */
+.rol {
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 20px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+    background: #0f172a;
+    color: #cbd5f5;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.rol.admin {
+    background: #dc2626;
+    color: white;
+}
+
+.rol.admin a {
+    display: inline-block;
+    margin-top: 10px;
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+}

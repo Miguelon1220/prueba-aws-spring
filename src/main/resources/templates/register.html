@@ -23,6 +23,11 @@
         <h2>Crear cuenta</h2>
         <p>Únete a TechStore y empieza a comprar</p>
 
+        <!-- MENSAJE ERROR ADMIN -->
+        <p th:if="${param.error}" style="color:red;">
+            Cédula no autorizada para administrador
+        </p>
+
         <form th:action="@{/register}" method="post" th:object="${usuario}">
 
             <div class="input-group">
@@ -36,7 +41,19 @@
             </div>
 
             <div class="input-group">
-                <input type="number" th:field="*{persona.edad}" required>
+                <input type="text"
+                       th:field="*{persona.cedula}"
+                       maxlength="10"
+                       pattern="[0-9]{10}"
+                       required>
+                <label>Cédula</label>
+            </div>
+
+            <div class="input-group">
+                <input type="number"
+                       th:field="*{persona.edad}"
+                       min="1"
+                       required>
                 <label>Edad</label>
             </div>
 
@@ -50,7 +67,16 @@
                 <label>Contraseña</label>
             </div>
 
-            <button type="submit">Registrarse</button>
+            <!-- BOTONES -->
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="submit" name="tipo" value="USER">
+                    Registrarse
+                </button>
+
+                <button type="submit" name="tipo" value="ADMIN">
+                    Admin
+                </button>
+            </div>
 
         </form>
     </div>

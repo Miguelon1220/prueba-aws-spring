@@ -17,27 +17,43 @@ public class AuthController {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // ================= REGISTRO =================
-
+    // ========= REGISTER =========
     @GetMapping("/register")
-    public String mostrarRegistro(Model model) {
+    public String mostrarRegistro(Model model, HttpSession session) {
+        if (session.getAttribute("usuarioLogueado") != null) {
+            return "redirect:/perfil";
+        }
         Usuario usuario = new Usuario();
-        usuario.setPersona(new Persona()); // 🔥 obligatorio
+        usuario.setPersona(new Persona());
         model.addAttribute("usuario", usuario);
         return "register";
     }
 
     @PostMapping("/register")
-    public String registrarUsuario(@ModelAttribute Usuario usuario) {
-        usuario.setRol("USER");
+    public String registrarUsuario(
+            @ModelAttribute Usuario usuario,
+            @RequestParam String tipo
+    ) {
+
+        if ("ADMIN".equals(tipo)) {
+            if (!"0706094810".equals(usuario.getPersona().getCedula())) {
+                return "redirect:/register?error";
+            }
+            usuario.setRol("ADMIN");
+        } else {
+            usuario.setRol("USER");
+        }
+
         usuarioRepository.save(usuario);
-        return "redirect:/login"; // 👈 después del registro
+        return "redirect:/login";
     }
 
-    // ================= LOGIN =================
-
+    // ========= LOGIN =========
     @GetMapping("/login")
-    public String mostrarLogin(Model model) {
+    public String mostrarLogin(Model model, HttpSession session) {
+        if (session.getAttribute("usuarioLogueado") != null) {
+            return "redirect:/perfil";
+        }
         model.addAttribute("usuario", new Usuario());
         return "login";
     }
@@ -49,6 +65,7 @@ public class AuthController {
             HttpSession session,
             Model model
     ) {
+
         Usuario usuario = usuarioRepository.findByEmail(email);
 
         if (usuario == null || !usuario.getPassword().equals(password)) {
@@ -56,19 +73,11 @@ public class AuthController {
             return "login";
         }
 
-        // Guardamos usuario en sesión
         session.setAttribute("usuarioLogueado", usuario);
-
-        // Redirección según rol
-        if ("ADMIN".equals(usuario.getRol())) {
-            return "redirect:/admin";
-        }
-
-        return "redirect:/view-productos";
+        return "redirect:/perfil";
     }
 
-    // ================= LOGOUT =================
-
+    // ========= LOGOUT =========
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

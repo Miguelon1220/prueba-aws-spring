@@ -14,9 +14,20 @@
         <a th:href="@{/}">Inicio</a>
         <a th:href="@{/view-productos}">Productos</a>
         <a th:href="@{/contacto}">Contacto</a>
-        <a th:href="@{/register}">Login / Register</a>
 
+        <!-- NO logueado -->
+        <span th:if="${session.usuarioLogueado == null}">
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/register}">Register</a>
+    </span>
+
+        <!-- Logueado -->
+        <span th:if="${session.usuarioLogueado != null}">
+        <a th:href="@{/perfil}">Perfil</a>
+        <a th:href="@{/logout}">Logout</a>
+    </span>
     </nav>
+
 </header>
 
 <main>

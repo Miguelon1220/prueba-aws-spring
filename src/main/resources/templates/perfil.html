@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil | TechStore</title>
+    <link rel="stylesheet" th:href="@{/css/perfil.css}">
+</head>
+
+<body>
+
+<header>
+    <h1>TechStore</h1>
+    <nav>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/view-productos}">Productos</a>
+        <a th:href="@{/contacto}">Contacto</a>
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+</header>
+
+<main>
+    <div class="perfil-card">
+        <h2>Mi Perfil</h2>
+
+        <div class="perfil-info">
+            <div><span>Nombre:</span> <span th:text="${usuario.persona.nombre}"></span></div>
+            <div><span>Apellido:</span> <span th:text="${usuario.persona.apellido}"></span></div>
+            <div><span>Email:</span> <span th:text="${usuario.email}"></span></div>
+            <div><span>Cédula:</span> <span th:text="${usuario.persona.cedula}"></span></div>
+            <div><span>Edad:</span> <span th:text="${usuario.persona.edad}"></span></div>
+        </div>
+
+        <!-- USUARIO NORMAL -->
+        <div class="rol" th:if="${!esAdmin}">
+            Rol: Usuario
+        </div>
+
+        <!-- ADMIN -->
+        <div class="rol admin" th:if="${esAdmin}">
+            Rol: Administrador 👷
+            <br><br>
+            <a th:href="@{/admin}">Panel de Administración</a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 TechStore</p>
+</footer>
+
+</body>
+</html>
