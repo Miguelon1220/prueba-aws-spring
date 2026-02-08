@@ -14,6 +14,7 @@ public class Producto {
     private Double precio;
     private String descripcion;
     private Integer stock; // mejor usar Integer que String para stock
+    private String imagenUrl;
 
     // -------------------
     // Getters y Setters
@@ -58,4 +59,8 @@ public class Producto {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    public String getImagenUrl() { return imagenUrl; }
+
+    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
 }

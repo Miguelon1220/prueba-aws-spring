@@ -1,38 +1,68 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Productos</title>
+    <link rel="stylesheet" th:href="@{/css/productos.css}">
 </head>
+
 <body>
 
-<h1>Lista de Productos</h1>
+<header>
+    <h1>TechStore</h1>
+    <nav>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/view-productos}">Productos</a>
+        <a th:href="@{/contacto}">Contacto</a>
+        <a th:href="@{/admin}">👷</a>
+    </nav>
+</header>
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Precio</th>
-        <th>Descripción</th>
-        <th>Stock</th>
-    </tr>
-    <tr th:each="p : ${productos}">
-        <td th:text="${p.id}"></td>
-        <td th:text="${p.nombre}"></td>
-        <td th:text="${p.precio}"></td>
-        <td th:text="${p.descripcion}"></td>
-        <td th:text="${p.stock}"></td>
-    </tr>
-</table>
+<main>
+    <h2>Catálogo de Productos</h2>
 
-<h2>Agregar Producto</h2>
-<form th:action="@{/view-productos/agregar}" th:object="${productoNuevo}" method="post">
-    <label>Nombre: <input type="text" th:field="*{nombre}" required /></label><br>
-    <label>Precio: <input type="number" step="0.01" th:field="*{precio}" required /></label><br>
-    <label>Descripción: <input type="text" th:field="*{descripcion}" /></label><br>
-    <label>Stock: <input type="number" th:field="*{stock}" required /></label><br>
-    <button type="submit">Agregar</button>
-</form>
+    <div class="productos">
+        <div class="producto" th:each="p : ${productos}">
+            <img th:src="${p.imagenUrl != null ? p.imagenUrl : 'https://img.icons8.com/color/200/box.png'}" alt="Imagen Producto">
+
+            <h3 th:text="${p.nombre}"></h3>
+            <p th:text="${p.descripcion}"></p>
+
+            <div class="precio">
+                $<span th:text="${p.precio}"></span>
+            </div>
+
+            <div class="stock">
+                Stock: <span th:text="${p.stock}"></span>
+            </div>
+
+            <!-- Botón Eliminar -->
+            <form th:action="@{/view-productos/eliminar/{id}(id=${p.id})}" method="post" style="margin-top:5px;">
+                <button type="submit" onclick="return confirm('¿Seguro que quieres eliminar este producto?')">Eliminar</button>
+            </form>
+        </div>
+    </div>
+
+    <h2>Agregar Nuevo Producto</h2>
+    <form th:action="@{/view-productos/agregar}" method="post" th:object="${productoNuevo}" enctype="multipart/form-data">
+        <input type="text" th:field="*{nombre}" placeholder="Nombre" required>
+        <input type="text" th:field="*{descripcion}" placeholder="Descripción" required>
+        <input type="number" th:field="*{precio}" placeholder="Precio" step="0.01" required>
+        <input type="number" th:field="*{stock}" placeholder="Stock" required>
+
+        <label>Imagen desde URL:</label>
+        <input type="text" th:field="*{imagenUrl}" placeholder="https://...">
+
+        <label>O subir imagen desde tu PC:</label>
+        <input type="file" name="imagenArchivo">
+
+        <button type="submit">Agregar Producto</button>
+    </form>
+</main>
+
+<footer>
+    <p>&copy; 2026 TechStore</p>
+</footer>
 
 </body>
 </html>

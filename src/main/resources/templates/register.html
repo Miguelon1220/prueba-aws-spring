@@ -1,30 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registro Usuario</title>
+    <title>Registrarse | TechStore</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
+
 <body>
-<h1>Registro de Usuario</h1>
 
-<form th:action="@{/register}" method="post">
-    <h3>Datos personales</h3>
-    <input type="text" name="nombre" placeholder="Nombre" required>
-    <input type="text" name="apellido" placeholder="Apellido" required>
-    <input type="number" name="edad" placeholder="Edad" required>
+<header>
+    <h1>TechStore</h1>
+    <nav>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/view-productos}">Productos</a>
+        <a th:href="@{/contacto}">Contacto</a>
+        <a th:href="@{/login}">Login</a>
+    </nav>
+</header>
 
-    <h3>Cuenta</h3>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
+<main>
+    <div class="register-card">
+        <h2>Crear cuenta</h2>
+        <p>Únete a TechStore y empieza a comprar</p>
 
-    <button type="submit">Registrarse</button>
-</form>
+        <form th:action="@{/register}" method="post" th:object="${usuario}">
 
+            <div class="input-group">
+                <input type="text" th:field="*{persona.nombre}" required>
+                <label>Nombre</label>
+            </div>
 
-<!-- Botón admin (por ahora solo visual) -->
-<form th:action="@{/admin}" method="get">
-    <button type="submit">Admin</button>
-</form>
+            <div class="input-group">
+                <input type="text" th:field="*{persona.apellido}" required>
+                <label>Apellido</label>
+            </div>
+
+            <div class="input-group">
+                <input type="number" th:field="*{persona.edad}" required>
+                <label>Edad</label>
+            </div>
+
+            <div class="input-group">
+                <input type="email" th:field="*{email}" required>
+                <label>Email</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" th:field="*{password}" required>
+                <label>Contraseña</label>
+            </div>
+
+            <button type="submit">Registrarse</button>
+
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 TechStore</p>
+</footer>
 
 </body>
 </html>

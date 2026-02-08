@@ -2,7 +2,8 @@ package com.pruebaaws.prueba.controller;
 
 import com.pruebaaws.prueba.entity.Persona;
 import com.pruebaaws.prueba.entity.Usuario;
-import com.pruebaaws.prueba.service.UsuarioService;
+import com.pruebaaws.prueba.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,51 +11,67 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class AuthController {
 
-    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
 
-    public AuthController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public AuthController(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
 
-    // 👉 Mostrar formulario de login / register
+    // ================= REGISTRO =================
+
     @GetMapping("/register")
-    public String mostrarFormularioRegistro(Model model) {
-        return "register"; // register.html
-    }
-
-    // 👉 Procesar registro de usuario
-    @PostMapping("/register")
-    public String registrarUsuario(
-            @RequestParam String nombre,
-            @RequestParam String apellido,
-            @RequestParam int edad,
-            @RequestParam String email,
-            @RequestParam String password
-    ) {
-
-        // 1️⃣ Crear Persona (datos adicionales)
-        Persona persona = new Persona();
-        persona.setNombre(nombre);
-        persona.setApellido(apellido);
-        persona.setEdad(edad);
-
-        // 2️⃣ Crear Usuario
+    public String mostrarRegistro(Model model) {
         Usuario usuario = new Usuario();
-        usuario.setEmail(email);
-        usuario.setPassword(password); // luego se encripta
-        usuario.setRol("USER");        // todos empiezan como USER
-        usuario.setPersona(persona);
-
-        // 3️⃣ Guardar (JPA guarda Persona + Usuario)
-        usuarioService.guardar(usuario);
-
-        // 4️⃣ Volver al home
-        return "redirect:/";
+        usuario.setPersona(new Persona()); // 🔥 obligatorio
+        model.addAttribute("usuario", usuario);
+        return "register";
     }
 
-    // 👉 Vista admin (por ahora solo placeholder)
-    @GetMapping("/admin")
-    public String admin() {
-        return "admin"; // admin.html (luego lo protegemos)
+    @PostMapping("/register")
+    public String registrarUsuario(@ModelAttribute Usuario usuario) {
+        usuario.setRol("USER");
+        usuarioRepository.save(usuario);
+        return "redirect:/login"; // 👈 después del registro
+    }
+
+    // ================= LOGIN =================
+
+    @GetMapping("/login")
+    public String mostrarLogin(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String procesarLogin(
+            @RequestParam String email,
+            @RequestParam String password,
+            HttpSession session,
+            Model model
+    ) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario == null || !usuario.getPassword().equals(password)) {
+            model.addAttribute("error", "Correo o contraseña incorrectos");
+            return "login";
+        }
+
+        // Guardamos usuario en sesión
+        session.setAttribute("usuarioLogueado", usuario);
+
+        // Redirección según rol
+        if ("ADMIN".equals(usuario.getRol())) {
+            return "redirect:/admin";
+        }
+
+        return "redirect:/view-productos";
+    }
+
+    // ================= LOGOUT =================
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 }
