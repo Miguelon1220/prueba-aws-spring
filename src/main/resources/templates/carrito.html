@@ -18,25 +18,47 @@
 <main>
     <h1>🛒 Mi Carrito</h1>
 
-    <div th:if="${items.isEmpty()}">
+    <!-- Mensaje de éxito o error -->
+    <div th:if="${mensaje}" class="mensaje">
+        <p th:text="${mensaje}"></p>
+    </div>
+
+    <!-- Carrito vacío -->
+    <div th:if="${items.isEmpty()}" class="carrito-vacio">
         <p>Tu carrito está vacío</p>
     </div>
 
+    <!-- Lista de items del carrito -->
     <div th:each="item : ${items}" class="item">
         <h3 th:text="${item.producto.nombre}"></h3>
         <p>Precio: $<span th:text="${item.producto.precio}"></span></p>
         <p>Cantidad: <span th:text="${item.cantidad}"></span></p>
 
-        <form th:action="@{/carrito/agregar/{id}(id=${item.producto.id})}" method="post">
+        <!-- Botón para aumentar cantidad -->
+        <form th:action="@{/carrito/agregar/{id}(id=${item.producto.id})}" method="post" style="display:inline;">
             <button>+</button>
         </form>
 
-        <form th:action="@{/carrito/eliminar/{id}(id=${item.id})}" method="post">
+        <!-- Botón para disminuir cantidad -->
+        <form th:action="@{/carrito/disminuir/{id}(id=${item.id})}" method="post" style="display:inline;">
+            <button>-</button>
+        </form>
+
+        <!-- Botón para eliminar item -->
+        <form th:action="@{/carrito/eliminar/{id}(id=${item.id})}" method="post" style="display:inline;">
             <button>Eliminar</button>
         </form>
     </div>
 
-    <h2>Total: $<span th:text="${total}"></span></h2>
+    <!-- Total y botón comprar -->
+    <div th:if="${!items.isEmpty()}">
+        <h2>Total: $<span th:text="${total}"></span></h2>
+
+        <!-- Botón comprar -->
+        <form th:action="@{/carrito/comprar}" method="post">
+            <button type="submit">Comprar</button>
+        </form>
+    </div>
 </main>
 
 </body>

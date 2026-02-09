@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -40,19 +41,12 @@ public class CarritoController {
         Usuario usuarioEnSesion = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuarioEnSesion == null) return "redirect:/login";
 
-        // Recarga usuario de DB
         Usuario usuario = usuarioRepo.findById(usuarioEnSesion.getId()).orElse(null);
         if (usuario == null) return "redirect:/login";
 
         List<CarritoItem> items = carritoRepo.findByUsuario(usuario);
 
-        // Forzar carga de productos para evitar LazyInitializationException
-        items.forEach(i -> {
-            if (i.getProducto() != null) {
-                i.getProducto().getNombre();
-            }
-        });
-
+        // Calcular total
         double total = items.stream()
                 .filter(i -> i.getProducto() != null)
                 .mapToDouble(i -> i.getProducto().getPrecio() * i.getCantidad())
@@ -69,17 +63,19 @@ public class CarritoController {
     // =========================
     @PostMapping("/agregar/{id}")
     @Transactional
-    public String agregarProducto(@PathVariable Long id, HttpSession session) {
+    public String agregarProducto(@PathVariable Long id,
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttrs) {
 
         Usuario usuarioEnSesion = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuarioEnSesion == null) return "redirect:/login";
 
-        // Recargar usuario para asegurar ID válido
         Usuario usuario = usuarioRepo.findById(usuarioEnSesion.getId()).orElse(null);
         if (usuario == null) return "redirect:/login";
 
         Producto producto = productoRepo.findById(id).orElse(null);
         if (producto == null || producto.getStock() == null || producto.getStock() <= 0) {
+            redirectAttrs.addFlashAttribute("mensaje", "Producto no disponible");
             return "redirect:/view-productos";
         }
 
@@ -95,9 +91,39 @@ public class CarritoController {
             if (item.getCantidad() < producto.getStock()) {
                 item.setCantidad(item.getCantidad() + 1);
                 carritoRepo.save(item);
+            } else {
+                redirectAttrs.addFlashAttribute("mensaje", "No hay más stock disponible");
+                return "redirect:/carrito";
             }
         }
 
+        redirectAttrs.addFlashAttribute("mensaje", "Producto agregado al carrito");
+        return "redirect:/carrito";
+    }
+
+    // =========================
+    // DISMINUIR CANTIDAD
+    // =========================
+    @PostMapping("/disminuir/{id}")
+    @Transactional
+    public String disminuirProducto(@PathVariable Long id,
+                                    HttpSession session,
+                                    RedirectAttributes redirectAttrs) {
+
+        Usuario usuarioEnSesion = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioEnSesion == null) return "redirect:/login";
+
+        CarritoItem item = carritoRepo.findById(id).orElse(null);
+        if (item != null && item.getUsuario().getId().equals(usuarioEnSesion.getId())) {
+            if (item.getCantidad() > 1) {
+                item.setCantidad(item.getCantidad() - 1);
+                carritoRepo.save(item);
+            } else {
+                carritoRepo.delete(item);
+            }
+        }
+
+        redirectAttrs.addFlashAttribute("mensaje", "Cantidad actualizada");
         return "redirect:/carrito";
     }
 
@@ -105,17 +131,53 @@ public class CarritoController {
     // ELIMINAR PRODUCTO
     // =========================
     @PostMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id, HttpSession session) {
+    @Transactional
+    public String eliminar(@PathVariable Long id,
+                           HttpSession session,
+                           RedirectAttributes redirectAttrs) {
 
         Usuario usuarioEnSesion = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuarioEnSesion == null) return "redirect:/login";
 
         CarritoItem item = carritoRepo.findById(id).orElse(null);
 
-        // Validar que el item pertenece al usuario
         if (item != null && item.getUsuario().getId().equals(usuarioEnSesion.getId())) {
             carritoRepo.delete(item);
+            redirectAttrs.addFlashAttribute("mensaje", "Producto eliminado del carrito");
         }
+
+        return "redirect:/carrito";
+    }
+
+    // =========================
+    // COMPRAR PRODUCTOS
+    // =========================
+    @PostMapping("/comprar")
+    @Transactional
+    public String comprar(HttpSession session, RedirectAttributes redirectAttrs) {
+
+        Usuario usuarioEnSesion = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioEnSesion == null) return "redirect:/login";
+
+        List<CarritoItem> items = carritoRepo.findByUsuario(usuarioEnSesion);
+
+        if (items.isEmpty()) {
+            redirectAttrs.addFlashAttribute("mensaje", "No hay productos en el carrito para comprar");
+            return "redirect:/carrito";
+        }
+
+        // Restar stock
+        for (CarritoItem item : items) {
+            Producto producto = item.getProducto();
+            if (producto != null) {
+                int nuevoStock = producto.getStock() - item.getCantidad();
+                producto.setStock(Math.max(nuevoStock, 0));
+                productoRepo.save(producto);
+            }
+        }
+
+        carritoRepo.deleteAll(items);
+        redirectAttrs.addFlashAttribute("mensaje", "Compra realizada con éxito");
 
         return "redirect:/carrito";
     }
