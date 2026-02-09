@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Productos</title>
+    <title>Productos | TechStore</title>
     <link rel="stylesheet" th:href="@{/css/productos.css}">
 </head>
 
@@ -15,32 +15,41 @@
         <a th:href="@{/view-productos}">Productos</a>
         <a th:href="@{/contacto}">Contacto</a>
 
-        <!-- SOLO ADMIN -->
-        <a th:if="${session.usuarioLogueado != null and session.usuarioLogueado.rol == 'ADMIN'}"
-           th:href="@{/admin}">
-            👷
+        <!-- CARRITO SOLO SI ESTÁ LOGUEADO -->
+        <a th:if="${usuarioLogueado != null}" th:href="@{/carrito}">
+            🛒 Carrito
         </a>
 
-        <!-- NO logueado -->
-        <span th:if="${session.usuarioLogueado == null}">
-        <a th:href="@{/login}">Login</a>
-        <a th:href="@{/register}">Register</a>
-    </span>
+        <!-- SI NO ESTÁ LOGUEADO -->
+        <a th:if="${usuarioLogueado == null}" th:href="@{/login}">
+            Login
+        </a>
 
-        <!-- Logueado -->
-        <span th:if="${session.usuarioLogueado != null}">
-        <a th:href="@{/perfil}">Perfil</a>
-        <a th:href="@{/logout}">Logout</a>
-    </span>
+        <!-- SI ESTÁ LOGUEADO -->
+        <a th:if="${usuarioLogueado != null}" th:href="@{/perfil}">
+            Perfil
+        </a>
+        <a th:if="${usuarioLogueado != null}" th:href="@{/logout}">
+            Logout
+        </a>
+
+        <!-- ICONO ADMIN -->
+        <span th:if="${usuarioLogueado != null and usuarioLogueado.rol == 'ADMIN'}">
+            👷 Admin
+        </span>
     </nav>
 </header>
 
 <main>
+
     <h2>Catálogo de Productos</h2>
 
     <div class="productos">
         <div class="producto" th:each="p : ${productos}">
-            <img th:src="${p.imagenUrl != null ? p.imagenUrl : 'https://img.icons8.com/color/200/box.png'}" alt="Imagen Producto">
+
+            <img th:src="${p.imagenUrl != null
+                ? p.imagenUrl
+                : 'https://img.icons8.com/color/200/box.png'}">
 
             <h3 th:text="${p.nombre}"></h3>
             <p th:text="${p.descripcion}"></p>
@@ -53,28 +62,49 @@
                 Stock: <span th:text="${p.stock}"></span>
             </div>
 
-            <!-- Botón Eliminar -->
-            <form th:action="@{/view-productos/eliminar/{id}(id=${p.id})}" method="post" style="margin-top:5px;">
-                <button type="submit" onclick="return confirm('¿Seguro que quieres eliminar este producto?')">Eliminar</button>
+            <!-- AGREGAR AL CARRITO SOLO SI ESTÁ LOGUEADO -->
+            <form th:if="${usuarioLogueado != null}"
+                  th:action="@{/carrito/agregar/{id}(id=${p.id})}"
+                  method="post">
+                <button>Agregar al carrito</button>
             </form>
+
+            <!-- BOTÓN ELIMINAR SOLO ADMIN -->
+            <form th:if="${usuarioLogueado != null and usuarioLogueado.rol == 'ADMIN'}"
+                  th:action="@{/view-productos/eliminar/{id}(id=${p.id})}"
+                  method="post">
+                <button type="submit"
+                        onclick="return confirm('¿Eliminar este producto?')">
+                    Eliminar
+                </button>
+            </form>
+
         </div>
     </div>
 
-    <h2>Agregar Nuevo Producto</h2>
-    <form th:action="@{/view-productos/agregar}" method="post" th:object="${productoNuevo}" enctype="multipart/form-data">
-        <input type="text" th:field="*{nombre}" placeholder="Nombre" required>
-        <input type="text" th:field="*{descripcion}" placeholder="Descripción" required>
-        <input type="number" th:field="*{precio}" placeholder="Precio" step="0.01" required>
-        <input type="number" th:field="*{stock}" placeholder="Stock" required>
+    <!-- FORMULARIO SOLO ADMIN -->
+    <div th:if="${usuarioLogueado != null and usuarioLogueado.rol == 'ADMIN'}">
 
-        <label>Imagen desde URL:</label>
-        <input type="text" th:field="*{imagenUrl}" placeholder="https://...">
+        <h2>Agregar Nuevo Producto</h2>
 
-        <label>O subir imagen desde tu PC:</label>
-        <input type="file" name="imagenArchivo">
+        <form th:action="@{/view-productos/agregar}"
+              method="post"
+              th:object="${productoNuevo}"
+              enctype="multipart/form-data">
 
-        <button type="submit">Agregar Producto</button>
-    </form>
+            <input type="text" th:field="*{nombre}" placeholder="Nombre" required>
+            <input type="text" th:field="*{descripcion}" placeholder="Descripción" required>
+            <input type="number" th:field="*{precio}" step="0.01" placeholder="Precio" required>
+            <input type="number" th:field="*{stock}" placeholder="Stock" required>
+
+            <input type="text" th:field="*{imagenUrl}" placeholder="URL de imagen (opcional)">
+            <input type="file" name="imagenArchivo">
+
+            <button type="submit">Agregar Producto</button>
+        </form>
+
+    </div>
+
 </main>
 
 <footer>
